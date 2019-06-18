@@ -84,7 +84,7 @@ let chart1_2_options = {
 
 
 const raceData = async () => {
-    return await fetch("https://129.213.95.248:7002/ords/sailgp/series")
+    return await fetch("https://129.213.95.248:7002/ords/sailgp/series", { rejectUnauthorized: false })
         .then(res => res.json())
         .then(data => {
             return ({
@@ -140,21 +140,22 @@ const raceData = async () => {
 }
 
 
-class NY extends React.Component {
+class Dashboard extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             bigChartData: "",
             races: [],
             teams: [],
-            race: ""
+            race: {
+                name: "Please Choose A Race",
+                id: ""
+            }
         };
     }
 
     componentWillMount() {
-        fetch(`https://129.213.95.248:7002/ords/sailgp/series`, {
-            rejectUnauthorized: false
-        })
+        fetch(`https://129.213.95.248:7002/ords/sailgp/series`)
             .then(res => res.json())
             .then(data => {
                 console.log(data.series[0].season[0].raceSets[1].races)
@@ -172,10 +173,15 @@ class NY extends React.Component {
     };
 
     handleRaceClick = e => {
+        let race = e.target.value;
+        let id = e.target.key;
         this.setState({
-            race: e.target.value
+            race: {
+                name: race,
+                id: id
+            }
         })
-        console.log(this.state.race)
+
     }
 
     render() {
@@ -185,25 +191,20 @@ class NY extends React.Component {
                     <Row>
                         <Col xs="12">
                             <UncontrolledDropdown>
-                                <span>
-                                    Choose A Race <DropdownToggle
-                                        caret
-                                        color="primary"
-                                        data-toggle="dropdown"
-                                        onClick={e => e.preventDefault()}
-                                    >
-                                    </DropdownToggle>
-                                </span>
+                                <DropdownToggle
+                                    caret
+                                    color="primary"
+                                    data-toggle="dropdown"
+                                    onClick={e => e.preventDefault()}
+                                >
+                                    {this.state.race.name}
+                                </DropdownToggle>
                                 <DropdownMenu className="dropdown-navbar" tag="ul">
                                     {this.state.races.map(race => {
-                                        console.log(race)
                                         return (
-                                            <NavLink tag="li" key={race.id} onClick={(e) => this.handleRaceClick(e.target.value)}>
-                                                <DropdownItem className="nav-item">
-                                                    {race.name}
-                                                </DropdownItem>
-                                            </NavLink>
-
+                                            <DropdownItem className="nav-item" key={race.id} value={race.name} onClick={(e) => this.handleRaceClick(e)}>
+                                                {race.name}
+                                            </DropdownItem>
                                         )
                                     })}
                                 </DropdownMenu>
@@ -270,4 +271,4 @@ class NY extends React.Component {
     }
 }
 
-export default NY;
+export default Dashboard;
