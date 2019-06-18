@@ -152,7 +152,9 @@ class NY extends React.Component {
     }
 
     componentWillMount() {
-        fetch(`https://129.213.95.248:7002/ords/sailgp/series`)
+        fetch(`https://129.213.95.248:7002/ords/sailgp/series`, {
+            rejectUnauthorized: false
+        })
             .then(res => res.json())
             .then(data => {
                 console.log(data.series[0].season[0].raceSets[1].races)
