@@ -155,9 +155,9 @@ class NY extends React.Component {
         fetch(`https://129.213.95.248:7002/ords/sailgp/series`)
             .then(res => res.json())
             .then(data => {
-                console.log(data.series[0].season[0].raceSets[0].races)
+                console.log(data.series[0].season[0].raceSets[1].races)
                 this.setState({
-                    races: data.series[0].season[0].raceSets[0].races
+                    races: data.series[0].season[0].raceSets[1].races
                 })
             })
     }
