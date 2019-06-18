@@ -240,14 +240,15 @@ class Sydney extends React.Component {
     }
 
     componentWillMount() {
-        fetch(`https://129.213.95.248:7002/ords/sailgp/series`)
+        fetch("https://129.213.95.248:7002/ords/sailgp/series")
             .then(res => res.json())
             .then(data => {
                 this.setState({
-                    raceSet: data.series[0].season[0].raceSets
+                    raceSet: data.series[0].season[0].raceSets[0].races
                 })
             })
     }
+
 
 
     setBgChartData = name => {

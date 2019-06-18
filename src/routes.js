@@ -1,7 +1,15 @@
+import Dashboard from "./views/Dashboard";
 import Sydney from "./views/Sydney.jsx";
 import SF from "./views/SF.jsx";
 
 var routes = [
+    {
+        path: "/dashboard",
+        name: "Dashboard",
+        icon: "tim-icons icon-chart-pie-36",
+        component: Dashboard,
+        layout: "/races"
+    },
     {
         path: "/newyork",
         name: "New York",
