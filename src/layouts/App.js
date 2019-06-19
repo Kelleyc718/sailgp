@@ -1,18 +1,39 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
-// javascript plugin used to create scrollbars on windows
 import PerfectScrollbar from "perfect-scrollbar";
-
-// core components
 import AppNavbar from "../components/Navbars/AppNavbar";
-
+import Dashboard from "../views/Dashboard";
 import Sidebar from "../components/Sidebar/Sidebar";
-
-import routes from "../routes.js";
-
 import logo from "../assets/img/logo.png";
 
 var ps;
+
+var routes = [
+    {
+        path: "/sydney",
+        raceId: 0,
+        name: "Sydney",
+        icon: "tim-icons icon-atom",
+        component: Dashboard,
+        layout: "/races"
+    },
+    {
+        path: "/ny",
+        raceId: 1,
+        name: "New York",
+        icon: "tim-icons icon-atom",
+        component: Dashboard,
+        layout: "/races"
+    },
+    {
+        path: "/sanfrancisco",
+        raceId: 2,
+        name: "San Francisco",
+        icon: "tim-icons icon-atom",
+        component: Dashboard,
+        layout: "/races"
+    },
+]
 
 class App extends React.Component {
     constructor(props) {
@@ -34,6 +55,7 @@ class App extends React.Component {
             }
         }
     }
+
     componentWillUnmount() {
         if (navigator.platform.indexOf("Win") > -1) {
             ps.destroy();
@@ -41,6 +63,7 @@ class App extends React.Component {
             document.documentElement.classList.remove("perfect-scrollbar-on");
         }
     }
+
     componentDidUpdate(e) {
         if (e.history.action === "PUSH") {
             if (navigator.platform.indexOf("Win") > -1) {
@@ -59,13 +82,13 @@ class App extends React.Component {
         document.documentElement.classList.toggle("nav-open");
         this.setState({ sidebarOpened: !this.state.sidebarOpened });
     };
-    getRoutes = routes => {
+    getRoutes = (routes) => {
         return routes.map((prop, key) => {
             if (prop.layout === "/races") {
                 return (
                     <Route
                         path={prop.layout + prop.path}
-                        component={prop.component}
+                        component={(props) => <Dashboard {...props} raceId={prop.raceId} />}
                         key={key}
                     />
                 );
@@ -117,8 +140,6 @@ class App extends React.Component {
                         />
                         <Switch>{this.getRoutes(routes)}</Switch>
                     </div>
-
-
                 </div>
 
             </>
