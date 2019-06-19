@@ -28,7 +28,6 @@ class Dashboard extends React.Component {
 
     }
 
-
     componentWillMount() {
         let id = this.props.raceId
         fetch(`https://129.213.95.248:7002/ords/sailgp/series`)
@@ -136,66 +135,69 @@ class Dashboard extends React.Component {
                     </Row>
                     <Row>
                         <Col xl="12">
-                            {raceDetails
-                                ?
-                                <Card color="primary">
-                                    <CardBody>
-
-                                        <CardTitle>
-                                            {raceDetails.name}
-                                        </CardTitle>
-
-
-                                        <CardSubtitle>
-                                            {raceDetails.type}
-                                            <p>
-                                                Start: {raceDetails.start}
-                                            </p>
-                                            <p>
-                                                Finish: {raceDetails.end}
-                                            </p>
-                                            <p>
-                                                Legs: {raceDetails.numberOfLegs}
-                                            </p>
-                                        </CardSubtitle>
-
-                                        <Col xs="12">
-                                            {
-                                                teams.length !== 0
-                                                    ? teams.map(team => {
-                                                        return (
-                                                            <Card key={team.id}>
-                                                                <CardBody>
-                                                                    <CardTitle>
-                                                                        {team.name}
-                                                                    </CardTitle>
-                                                                    <CardText>
-                                                                        Distance Sailed:
-                                                            </CardText>
-                                                                </CardBody>
-                                                            </Card>
-                                                        )
-                                                    })
-                                                    : <p>No Teams</p>
-                                            }
-
-                                        </Col>
-                                    </CardBody>
-                                </Card>
-                                :
-                                <React.Fragment>
-                                    <hr />
-                                    <Row>
-                                        <h1 className="text-center">
-                                            Welcome to Sail GP
+                            {
+                                raceDetails
+                                    ? <Card color="primary">
+                                        <CardBody>
+                                            <CardTitle>
+                                                {raceDetails.name}
+                                            </CardTitle>
+                                            <CardSubtitle>
+                                                {raceDetails.type}
+                                                <p>Start: {raceDetails.start}</p>
+                                                <p>Finish: {raceDetails.end}</p>
+                                                <p>Legs: {raceDetails.numberOfLegs}</p>
+                                            </CardSubtitle>
+                                            <Col xs="12">
+                                                {
+                                                    teams.length !== 0
+                                                        ? teams.map(team => {
+                                                            return (
+                                                                <Card key={team.id}>
+                                                                    <CardBody>
+                                                                        <CardTitle>
+                                                                            {team.name}
+                                                                        </CardTitle>
+                                                                        {
+                                                                            Object.keys(team.stats).map((key, i) => {
+                                                                                return (
+                                                                                    <Card>
+                                                                                        <CardBody>
+                                                                                            <CardHeader>
+                                                                                                {key}
+                                                                                            </CardHeader>
+                                                                                            {Object.keys(team.stats[key]).map(el => {
+                                                                                                return (
+                                                                                                    <CardText>
+                                                                                                        {el}: {team.stats[key][el]}
+                                                                                                    </CardText>
+                                                                                                )
+                                                                                            })}
+                                                                                        </CardBody>
+                                                                                    </Card>
+                                                                                )
+                                                                            })
+                                                                        }
+                                                                    </CardBody>
+                                                                </Card>
+                                                            )
+                                                        })
+                                                        : <p>No Teams</p>
+                                                }
+                                            </Col>
+                                        </CardBody>
+                                    </Card>
+                                    : <React.Fragment>
+                                        <hr />
+                                        <Row>
+                                            <h1 className="text-center">
+                                                Welcome to Sail GP
                                         </h1>
-                                    </Row>
-                                </React.Fragment>
+                                        </Row>
+                                    </React.Fragment>
                             }
                         </Col>
-
                     </Row>
-
                 </div>
             </>
         );
