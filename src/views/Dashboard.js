@@ -2,6 +2,8 @@ import React from "react";
 import {
     Card,
     CardBody,
+    CardHeader,
+    CardSubtitle,
     CardTitle,
     CardText,
     DropdownToggle,
@@ -16,8 +18,7 @@ class Dashboard extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            bigChartData: null,
-            raceSets: [],
+            raceDetails: null,
             races: [],
             teams: [],
             race: {
@@ -39,20 +40,17 @@ class Dashboard extends React.Component {
             })
     }
 
-    setBgChartData = name => {
-        this.setState({
-            bigChartData: name
-        });
-    };
-
     fetchRace = (id) => {
         fetch(`https://129.213.95.248:7002/ords/sailgp/raceinfo/stats/raceid/${id}`)
             .then(res => res.json())
-            .then(data => { this.setState({ raceDetails: data }) })
+            .then(data => {
+                this.setState({ raceDetails: data, teams: data.competitors })
+            })
     }
 
     render() {
-
+        const { race, races, raceDetails, teams } = this.state;
+        console.log(this.state)
         return (
             <>
                 <div className="content">
@@ -115,10 +113,10 @@ class Dashboard extends React.Component {
                                     data-toggle="dropdown"
                                     onClick={e => e.preventDefault()}
                                 >
-                                    {this.state.race.name}
+                                    {race.name}
                                 </DropdownToggle>
                                 <DropdownMenu className="dropdown">
-                                    {this.state.races.map(race => {
+                                    {races.map(race => {
                                         return (
                                             <DropdownItem key={race.id} value={race.id} onClick={
                                                 () => this.setState(
@@ -138,40 +136,49 @@ class Dashboard extends React.Component {
                     </Row>
                     <Row>
                         <Col xl="12">
-                            {this.state.raceDetails
+                            {raceDetails
                                 ?
-                                <Card>
+                                <Card color="primary">
                                     <CardBody>
+
                                         <CardTitle>
-                                            {this.state.raceDetails.name}
+                                            {raceDetails.name}
                                         </CardTitle>
-                                        <p>
-                                            Start: {this.state.raceDetails.start}
-                                        </p>
-                                        <p>
-                                            Finish: {this.state.raceDetails.end}
-                                        </p>
+
+
+                                        <CardSubtitle>
+                                            {raceDetails.type}
+                                            <p>
+                                                Start: {raceDetails.start}
+                                            </p>
+                                            <p>
+                                                Finish: {raceDetails.end}
+                                            </p>
+                                            <p>
+                                                Legs: {raceDetails.numberOfLegs}
+                                            </p>
+                                        </CardSubtitle>
+
                                         <Col xs="12">
-                                            {this.state.raceDetails.competitors.map(team => {
-                                                console.log(this.state.raceDetails)
-
-                                                return (
-
-                                                    <Card key={team.id}>
-                                                        <CardBody>
-                                                            <CardTitle>
-                                                                {team.name}
-                                                            </CardTitle>
-                                                            <CardText>
-                                                                {team.raceResult}
+                                            {
+                                                teams.length !== 0
+                                                    ? teams.map(team => {
+                                                        return (
+                                                            <Card key={team.id}>
+                                                                <CardBody>
+                                                                    <CardTitle>
+                                                                        {team.name}
+                                                                    </CardTitle>
+                                                                    <CardText>
+                                                                        Distance Sailed:
                                                             </CardText>
-                                                        </CardBody>
-                                                    </Card>
-
-
-                                                )
+                                                                </CardBody>
+                                                            </Card>
+                                                        )
+                                                    })
+                                                    : <p>No Teams</p>
                                             }
-                                            )}
+
                                         </Col>
                                     </CardBody>
                                 </Card>
