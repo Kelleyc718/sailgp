@@ -6,9 +6,12 @@ import {
     CardSubtitle,
     CardTitle,
     CardText,
+    Container,
+    Collapse,
     DropdownToggle,
     DropdownMenu,
     DropdownItem,
+    Jumbotron,
     UncontrolledDropdown,
     Row,
     Col
@@ -23,7 +26,8 @@ class Dashboard extends React.Component {
             teams: [],
             race: {
                 name: "Please Choose A Race"
-            }
+            },
+            collapse: false
         };
 
     }
@@ -47,62 +51,71 @@ class Dashboard extends React.Component {
             })
     }
 
+    handleCollapse(teamName) {
+        this.state.collapse
+            ? this.setState({ collapse: false })
+            : this.setState({ collapse: teamName })
+
+    }
+
     render() {
         const { race, races, raceDetails, teams } = this.state;
-        console.log(this.state)
         return (
-            <>
-                <div className="content">
-                    <Row>
-                        <Col xs="4">
-                            <Card>
-                                <CardBody>
-                                    <CardTitle className="text-center">All Time Top Speeds</CardTitle>
-                                    <CardText>
-                                        Boat:
+            < >
+                <div className="content img-background">
+                    {raceDetails
+                        ? <Row>
+                            <Col xs="4">
+                                <Card>
+                                    <CardBody>
+                                        <CardTitle className="text-center">All Time Top Speeds</CardTitle>
+                                        <CardText>
+                                            Boat:
                                     </CardText>
-                                    <CardText>
-                                        Speed:
+                                        <CardText>
+                                            Speed:
                                     </CardText>
-                                    <CardText>
-                                        Date:
+                                        <CardText>
+                                            Date:
                                     </CardText>
-                                </CardBody>
-                            </Card>
-                        </Col>
-                        <Col xs="4">
-                            <Card>
-                                <CardBody>
-                                    <CardTitle className="text-center">Event Top Speeds</CardTitle>
-                                    <CardText>
-                                        Boat:
+                                    </CardBody>
+                                </Card>
+                            </Col>
+                            <Col xs="4">
+                                <Card>
+                                    <CardBody>
+                                        <CardTitle className="text-center">Event Top Speeds</CardTitle>
+                                        <CardText>
+                                            Boat:
                                     </CardText>
-                                    <CardText>
-                                        Speed:
+                                        <CardText>
+                                            Speed:
                                     </CardText>
-                                    <CardText>
-                                        Date:
+                                        <CardText>
+                                            Date:
                                     </CardText>
-                                </CardBody>
-                            </Card>
-                        </Col>
-                        <Col xs="4">
-                            <Card>
-                                <CardBody>
-                                    <CardTitle className="text-center">Daily Top Speeds</CardTitle>
-                                    <CardText>
-                                        Boat:
+                                    </CardBody>
+                                </Card>
+                            </Col>
+                            <Col xs="4">
+                                <Card>
+                                    <CardBody>
+                                        <CardTitle className="text-center">Daily Top Speeds</CardTitle>
+                                        <CardText>
+                                            Boat:
                                     </CardText>
-                                    <CardText>
-                                        Speed:
+                                        <CardText>
+                                            Speed:
                                     </CardText>
-                                    <CardText>
-                                        Date:
+                                        <CardText>
+                                            Date:
                                     </CardText>
-                                </CardBody>
-                            </Card>
-                        </Col>
-                    </Row>
+                                    </CardBody>
+                                </Card>
+                            </Col>
+                        </Row>
+                        : <div />}
+                    <br />
                     <Row>
                         <Col className="col-auto">
                             <UncontrolledDropdown>
@@ -137,7 +150,8 @@ class Dashboard extends React.Component {
                         <Col xl="12">
                             {
                                 raceDetails
-                                    ? <Card color="primary">
+                                    ?
+                                    <Card color='primary' style={{ overflow: 'scroll' }}>
                                         <CardBody>
                                             <CardTitle>
                                                 {raceDetails.name}
@@ -148,51 +162,62 @@ class Dashboard extends React.Component {
                                                 <p>Finish: {raceDetails.end}</p>
                                                 <p>Legs: {raceDetails.numberOfLegs}</p>
                                             </CardSubtitle>
-                                            <Col xs="12">
-                                                {
-                                                    teams.length !== 0
-                                                        ? teams.map(team => {
-                                                            return (
-                                                                <Card key={team.id}>
-                                                                    <CardBody>
-                                                                        <CardTitle>
-                                                                            {team.name}
-                                                                        </CardTitle>
+                                            {
+                                                teams.length !== 0
+                                                    ? teams.map(team => {
+                                                        let teamName = team.name.split(" ")
+                                                        return (
+                                                            <Card key={team.id} className={`${teamName[0]}-team-img`} style={{ marginBottom: '1rem' }} onClick={() => this.handleCollapse(teamName[0])}>
+                                                                <CardBody >
+                                                                    <CardTitle>
+                                                                        {team.name}
+                                                                    </CardTitle>
+                                                                    <Collapse isOpen={this.state.collapse === teamName[0]}>
+
                                                                         {
                                                                             Object.keys(team.stats).map((key, i) => {
                                                                                 return (
-                                                                                    <Card>
+                                                                                    <Card className='opacity-1'>
                                                                                         <CardBody>
                                                                                             <CardHeader>
                                                                                                 {key}
                                                                                             </CardHeader>
-                                                                                            {Object.keys(team.stats[key]).map(el => {
-                                                                                                return (
-                                                                                                    <CardText>
-                                                                                                        {el}: {team.stats[key][el]}
-                                                                                                    </CardText>
-                                                                                                )
-                                                                                            })}
+                                                                                            {
+                                                                                                Object.keys(team.stats[key]).map(el => {
+                                                                                                    return (
+                                                                                                        <Col xl='4'>
+                                                                                                            {el}: {team.stats[key][el]}
+                                                                                                        </Col>
+                                                                                                    )
+                                                                                                })
+                                                                                            }
                                                                                         </CardBody>
                                                                                     </Card>
                                                                                 )
                                                                             })
                                                                         }
-                                                                    </CardBody>
-                                                                </Card>
-                                                            )
-                                                        })
-                                                        : <p>No Teams</p>
-                                                }
-                                            </Col>
+                                                                    </Collapse>
+                                                                </CardBody>
+
+
+                                                            </Card>
+                                                        )
+                                                    })
+                                                    : <p>No Teams</p>
+                                            }
+
                                         </CardBody>
                                     </Card>
+
+
                                     : <React.Fragment>
                                         <hr />
                                         <Row>
-                                            <h1 className="text-center">
-                                                Welcome to Sail GP
-                                        </h1>
+                                            <Col xs="12">
+                                                <h1 className="text-center">
+                                                    Welcome to Sail GP
+                                                </h1>
+                                            </Col>
                                         </Row>
                                     </React.Fragment>
                             }

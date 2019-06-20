@@ -1,8 +1,5 @@
 import React from "react";
-// nodejs library that concatenates classes
 import classNames from "classnames";
-
-// reactstrap components
 import {
     Collapse,
     DropdownToggle,
@@ -100,27 +97,27 @@ class AppNavbar extends React.Component {
                                         <NavLink tag="li">
                                             <DropdownItem className="nav-item">
                                                 Mike John responded to your email
-                      </DropdownItem>
+                                            </DropdownItem>
                                         </NavLink>
                                         <NavLink tag="li">
                                             <DropdownItem className="nav-item">
                                                 You have 5 more tasks
-                      </DropdownItem>
+                                            </DropdownItem>
                                         </NavLink>
                                         <NavLink tag="li">
                                             <DropdownItem className="nav-item">
                                                 Your friend Michael is in town
-                      </DropdownItem>
+                                            </DropdownItem>
                                         </NavLink>
                                         <NavLink tag="li">
                                             <DropdownItem className="nav-item">
                                                 Another notification
-                      </DropdownItem>
+                                            </DropdownItem>
                                         </NavLink>
                                         <NavLink tag="li">
                                             <DropdownItem className="nav-item">
                                                 Another one
-                      </DropdownItem>
+                                            </DropdownItem>
                                         </NavLink>
                                     </DropdownMenu>
                                 </UncontrolledDropdown>
